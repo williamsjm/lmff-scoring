@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "matches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "matchdayId", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "standings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "points", "order": "DESCENDING" },
+        { "fieldPath": "scoreDifference", "order": "DESCENDING" },
+        { "fieldPath": "scoreFor", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "tournaments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "startDate", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

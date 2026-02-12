@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.score-input .ant-input-number-input {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+
+@media (max-width: 768px) {
+  .score-input .ant-input-number-input {
+    font-size: 28px !important;
+  }
+}
+
+.standings-row-top {
+  background-color: #f6ffed;
+}
+
+.matchday-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.matchday-nav {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
