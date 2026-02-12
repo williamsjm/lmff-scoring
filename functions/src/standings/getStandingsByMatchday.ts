@@ -1,8 +1,5 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import * as admin from 'firebase-admin';
-
-if (!admin.apps.length) admin.initializeApp();
-const db = admin.firestore();
+import { db } from '../admin';
 
 export const getStandingsByMatchday = onCall(async (request) => {
   const { leagueId, tournamentId, matchdayNumber } = request.data;

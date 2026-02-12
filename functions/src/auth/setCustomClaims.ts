@@ -1,7 +1,5 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import * as admin from 'firebase-admin';
-
-if (!admin.apps.length) admin.initializeApp();
+import { admin } from '../admin';
 
 export const setUserRole = onCall(async (request) => {
   if (!request.auth?.token?.role ||

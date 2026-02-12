@@ -1,51 +1,15 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStandingsByMatchday = void 0;
 const https_1 = require("firebase-functions/v2/https");
-const admin = __importStar(require("firebase-admin"));
-if (!admin.apps.length)
-    admin.initializeApp();
-const db = admin.firestore();
+const admin_1 = require("../admin");
 exports.getStandingsByMatchday = (0, https_1.onCall)(async (request) => {
     var _a, _b, _c;
     const { leagueId, tournamentId, matchdayNumber } = request.data;
     if (!leagueId || !tournamentId || matchdayNumber === undefined) {
         throw new https_1.HttpsError('invalid-argument', 'Missing required parameters');
     }
-    const tournamentSnap = await db
+    const tournamentSnap = await admin_1.db
         .doc(`leagues/${leagueId}/tournaments/${tournamentId}`)
         .get();
     if (!tournamentSnap.exists) {
@@ -56,14 +20,14 @@ exports.getStandingsByMatchday = (0, https_1.onCall)(async (request) => {
     const pointsDraw = (_b = tournament.pointsDraw) !== null && _b !== void 0 ? _b : 1;
     const pointsLoss = (_c = tournament.pointsLoss) !== null && _c !== void 0 ? _c : 0;
     const teamIds = tournament.teamIds || [];
-    const matchesSnap = await db
+    const matchesSnap = await admin_1.db
         .collection(`leagues/${leagueId}/tournaments/${tournamentId}/matches`)
         .where('status', '==', 'completed')
         .where('matchdayNumber', '<=', matchdayNumber)
         .get();
     const teamsMap = new Map();
     for (const teamId of teamIds) {
-        const teamSnap = await db.doc(`leagues/${leagueId}/teams/${teamId}`).get();
+        const teamSnap = await admin_1.db.doc(`leagues/${leagueId}/teams/${teamId}`).get();
         if (teamSnap.exists) {
             const d = teamSnap.data();
             teamsMap.set(teamId, { name: d.name, logo: d.logo || null, color: d.color || '#000000' });

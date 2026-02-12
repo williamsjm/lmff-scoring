@@ -5,9 +5,9 @@ import {
   orderBy,
   onSnapshot,
 } from 'firebase/firestore';
-import { httpsCallable } from 'firebase/functions';
-import { db, functions } from '../../../app/firebase';
+import { db } from '../../../app/firebase';
 import { COLLECTIONS } from '../../../shared/constants/firestore-paths';
+import { apiClient } from '../../../shared/services/apiClient';
 import type { Standing } from '../types/standings.types';
 
 export const standingsService = {
@@ -52,11 +52,8 @@ export const standingsService = {
     tournamentId: string,
     matchdayNumber: number
   ): Promise<Standing[]> => {
-    const fn = httpsCallable<
-      { leagueId: string; tournamentId: string; matchdayNumber: number },
-      Standing[]
-    >(functions, 'getStandingsByMatchday');
-    const result = await fn({ leagueId, tournamentId, matchdayNumber });
-    return result.data;
+    return apiClient.get<Standing[]>(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/standings?matchday=${matchdayNumber}`
+    );
   },
 };

@@ -1,5 +1,4 @@
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '../../../app/firebase';
+import { apiClient } from '../../../shared/services/apiClient';
 
 interface SetUserRoleParams {
   uid: string;
@@ -9,7 +8,9 @@ interface SetUserRoleParams {
 
 export const authService = {
   setUserRole: async (params: SetUserRoleParams) => {
-    const setRole = httpsCallable(functions, 'setUserRole');
-    return setRole(params);
+    return apiClient.post<{ success: boolean }>(`/users/${params.uid}/role`, {
+      role: params.role,
+      leagueId: params.leagueId,
+    });
   },
 };

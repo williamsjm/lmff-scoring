@@ -1,23 +1,31 @@
 import {
   collection,
-  doc,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
-  serverTimestamp,
-  Timestamp,
-  writeBatch,
   onSnapshot,
-  increment,
+  Timestamp,
 } from 'firebase/firestore';
 import { db } from '../../../app/firebase';
 import { COLLECTIONS } from '../../../shared/constants/firestore-paths';
+import { apiClient } from '../../../shared/services/apiClient';
 import type { Match, MatchFormValues, MatchScoreUpdate } from '../types/match.types';
 import type { Team } from '../../teams/types/team.types';
+
+type ApiMatch = Omit<Match, 'date' | 'createdAt' | 'updatedAt'> & {
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+function toMatch(m: ApiMatch): Match {
+  return {
+    ...m,
+    date: Timestamp.fromDate(new Date(m.date)),
+    createdAt: Timestamp.fromDate(new Date(m.createdAt)),
+    updatedAt: Timestamp.fromDate(new Date(m.updatedAt)),
+  };
+}
 
 export const matchService = {
   getByMatchday: async (
@@ -25,57 +33,42 @@ export const matchService = {
     tournamentId: string,
     matchdayId: string
   ): Promise<Match[]> => {
-    const q = query(
-      collection(db, COLLECTIONS.MATCHES(leagueId, tournamentId)),
-      where('matchdayId', '==', matchdayId),
-      orderBy('date', 'asc')
+    const data = await apiClient.get<ApiMatch[]>(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches?matchdayId=${matchdayId}`
     );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Match));
+    return data.map(toMatch);
   },
 
   getAll: async (leagueId: string, tournamentId: string): Promise<Match[]> => {
-    const q = query(
-      collection(db, COLLECTIONS.MATCHES(leagueId, tournamentId)),
-      orderBy('date', 'asc')
+    const data = await apiClient.get<ApiMatch[]>(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches`
     );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Match));
+    return data.map(toMatch);
   },
 
+  // homeTeam and awayTeam kept for API compatibility; backend denormalizes server-side
   create: async (
     leagueId: string,
     tournamentId: string,
     data: MatchFormValues,
     matchdayId: string,
     matchdayNumber: number,
-    homeTeam: Team,
-    awayTeam: Team
+    _homeTeam?: Team,
+    _awayTeam?: Team
   ): Promise<string> => {
-    const docRef = await addDoc(
-      collection(db, COLLECTIONS.MATCHES(leagueId, tournamentId)),
+    const result = await apiClient.post<{ id: string }>(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches`,
       {
         matchdayId,
         matchdayNumber,
-        homeTeamId: homeTeam.id,
-        homeTeamName: homeTeam.name,
-        homeTeamLogo: homeTeam.logo,
-        awayTeamId: awayTeam.id,
-        awayTeamName: awayTeam.name,
-        awayTeamLogo: awayTeam.logo,
-        homeScore: null,
-        awayScore: null,
-        date: Timestamp.fromDate(new Date(data.date)),
+        homeTeamId: data.homeTeamId,
+        awayTeamId: data.awayTeamId,
+        date: data.date,
         time: data.time,
         venue: data.venue,
-        status: 'scheduled',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
       }
     );
-    const matchdayRef = doc(db, COLLECTIONS.MATCHDAYS(leagueId, tournamentId), matchdayId);
-    await updateDoc(matchdayRef, { matchCount: increment(1) });
-    return docRef.id;
+    return result.id;
   },
 
   updateScore: async (
@@ -85,13 +78,10 @@ export const matchService = {
     homeScore: number,
     awayScore: number
   ): Promise<void> => {
-    const matchRef = doc(db, COLLECTIONS.MATCHES(leagueId, tournamentId), matchId);
-    await updateDoc(matchRef, {
-      homeScore,
-      awayScore,
-      status: 'completed',
-      updatedAt: serverTimestamp(),
-    });
+    await apiClient.patch(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches/${matchId}/score`,
+      { homeScore, awayScore }
+    );
   },
 
   updateScoresBatch: async (
@@ -100,38 +90,21 @@ export const matchService = {
     scores: MatchScoreUpdate[],
     matchdayId: string
   ): Promise<void> => {
-    const batch = writeBatch(db);
-    let newCompletedCount = 0;
-
-    for (const score of scores) {
-      const matchRef = doc(db, COLLECTIONS.MATCHES(leagueId, tournamentId), score.matchId);
-      batch.update(matchRef, {
-        homeScore: score.homeScore,
-        awayScore: score.awayScore,
-        status: 'completed',
-        updatedAt: serverTimestamp(),
-      });
-      newCompletedCount++;
-    }
-
-    const matchdayRef = doc(db, COLLECTIONS.MATCHDAYS(leagueId, tournamentId), matchdayId);
-    batch.update(matchdayRef, {
-      completedMatchCount: increment(newCompletedCount),
-      updatedAt: serverTimestamp(),
-    });
-
-    await batch.commit();
+    await apiClient.patch(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches/scores-batch`,
+      { matchdayId, scores }
+    );
   },
 
   delete: async (
     leagueId: string,
     tournamentId: string,
     matchId: string,
-    matchdayId: string
+    _matchdayId?: string
   ): Promise<void> => {
-    await deleteDoc(doc(db, COLLECTIONS.MATCHES(leagueId, tournamentId), matchId));
-    const matchdayRef = doc(db, COLLECTIONS.MATCHDAYS(leagueId, tournamentId), matchdayId);
-    await updateDoc(matchdayRef, { matchCount: increment(-1) });
+    await apiClient.delete(
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches/${matchId}`
+    );
   },
 
   subscribeByMatchday: (

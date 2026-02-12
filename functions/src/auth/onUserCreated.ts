@@ -1,8 +1,5 @@
 import { beforeUserCreated } from 'firebase-functions/v2/identity';
-import * as admin from 'firebase-admin';
-
-if (!admin.apps.length) admin.initializeApp();
-const db = admin.firestore();
+import { admin, db } from '../admin';
 
 export const onUserCreated = beforeUserCreated(async (event) => {
   const user = event.data;

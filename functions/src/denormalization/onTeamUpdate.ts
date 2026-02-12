@@ -1,8 +1,5 @@
 import { onDocumentUpdated } from 'firebase-functions/v2/firestore';
-import * as admin from 'firebase-admin';
-
-if (!admin.apps.length) admin.initializeApp();
-const db = admin.firestore();
+import { db } from '../admin';
 
 export const propagateTeamChanges = onDocumentUpdated(
   'leagues/{leagueId}/teams/{teamId}',
