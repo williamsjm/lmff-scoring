@@ -10,7 +10,7 @@ const serialization_1 = require("../utils/serialization");
 exports.tournamentsRouter = (0, express_1.Router)({ mergeParams: true });
 const TournamentSchema = zod_1.z.object({
     name: zod_1.z.string().min(1),
-    status: zod_1.z.enum(['active', 'finished', 'upcoming']),
+    status: zod_1.z.enum(["active", "finished", "upcoming"]),
     startDate: zod_1.z.string().min(1),
     endDate: zod_1.z.string().min(1),
     teamIds: zod_1.z.array(zod_1.z.string()).optional().default([]),
@@ -20,42 +20,47 @@ const TournamentSchema = zod_1.z.object({
 });
 // GET /api/leagues/:leagueId/tournaments
 // GET /api/leagues/:leagueId/tournaments?status=active
-exports.tournamentsRouter.get('/', async (req, res) => {
+exports.tournamentsRouter.get("/", async (req, res) => {
     const { leagueId } = req.params;
     const { status } = req.query;
     try {
         let query = admin_1.db.collection(`leagues/${leagueId}/tournaments`);
         if (status) {
-            query = query.where('status', '==', status).orderBy('startDate', 'desc');
+            query = query
+                .where("status", "==", status)
+                .orderBy("startDate", "desc");
         }
         else {
-            query = query.orderBy('startDate', 'desc');
+            query = query.orderBy("startDate", "desc");
         }
         const snap = await query.get();
-        const tournaments = snap.docs.map((d) => ({ id: d.id, ...(0, serialization_1.serializeDoc)(d.data()) }));
+        const tournaments = snap.docs.map((d) => ({
+            id: d.id,
+            ...(0, serialization_1.serializeDoc)(d.data()),
+        }));
         res.json(tournaments);
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to fetch tournaments' });
+        res.status(500).json({ error: "Failed to fetch tournaments" });
     }
 });
 // GET /api/leagues/:leagueId/tournaments/:tId
-exports.tournamentsRouter.get('/:tId', async (req, res) => {
+exports.tournamentsRouter.get("/:tId", async (req, res) => {
     const { leagueId, tId } = req.params;
     try {
         const snap = await admin_1.db.doc(`leagues/${leagueId}/tournaments/${tId}`).get();
         if (!snap.exists) {
-            res.status(404).json({ error: 'Tournament not found' });
+            res.status(404).json({ error: "Tournament not found" });
             return;
         }
         res.json({ id: snap.id, ...(0, serialization_1.serializeDoc)(snap.data()) });
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to fetch tournament' });
+        res.status(500).json({ error: "Failed to fetch tournament" });
     }
 });
 // POST /api/leagues/:leagueId/tournaments
-exports.tournamentsRouter.post('/', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.tournamentsRouter.post("/", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     const parse = TournamentSchema.safeParse(req.body);
     if (!parse.success) {
         res.status(400).json({ error: parse.error.flatten() });
@@ -65,7 +70,9 @@ exports.tournamentsRouter.post('/', authenticate_1.authenticate, requireAdmin_1.
     const data = parse.data;
     try {
         const now = admin_1.admin.firestore.FieldValue.serverTimestamp();
-        const docRef = await admin_1.db.collection(`leagues/${leagueId}/tournaments`).add({
+        const docRef = await admin_1.db
+            .collection(`leagues/${leagueId}/tournaments`)
+            .add({
             ...data,
             startDate: (0, serialization_1.toTimestamp)(data.startDate),
             endDate: (0, serialization_1.toTimestamp)(data.endDate),
@@ -76,11 +83,11 @@ exports.tournamentsRouter.post('/', authenticate_1.authenticate, requireAdmin_1.
         res.status(201).json({ id: docRef.id });
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to create tournament' });
+        res.status(500).json({ error: "Failed to create tournament" });
     }
 });
 // PATCH /api/leagues/:leagueId/tournaments/:tId
-exports.tournamentsRouter.patch('/:tId', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.tournamentsRouter.patch("/:tId", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     const { leagueId, tId } = req.params;
     const parse = TournamentSchema.partial().safeParse(req.body);
     if (!parse.success) {
@@ -101,18 +108,18 @@ exports.tournamentsRouter.patch('/:tId', authenticate_1.authenticate, requireAdm
         res.json({ id: tId });
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to update tournament' });
+        res.status(500).json({ error: "Failed to update tournament" });
     }
 });
 // DELETE /api/leagues/:leagueId/tournaments/:tId
-exports.tournamentsRouter.delete('/:tId', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.tournamentsRouter.delete("/:tId", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     const { leagueId, tId } = req.params;
     try {
         await admin_1.db.doc(`leagues/${leagueId}/tournaments/${tId}`).delete();
         res.status(204).send();
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to delete tournament' });
+        res.status(500).json({ error: "Failed to delete tournament" });
     }
 });
 //# sourceMappingURL=tournaments.router.js.map

@@ -12,16 +12,17 @@ const TeamSchema = zod_1.z.object({
     name: zod_1.z.string().min(1),
     color: zod_1.z.string().min(1),
     logo: zod_1.z.string().nullable().optional(),
+    isActive: zod_1.z.boolean(),
 });
 // GET /api/leagues/:leagueId/teams
 // GET /api/leagues/:leagueId/teams?ids=a,b,c
-exports.teamsRouter.get('/', async (req, res) => {
+exports.teamsRouter.get("/", async (req, res) => {
     const { leagueId } = req.params;
     const idsParam = req.query.ids;
     try {
         let docs;
         if (idsParam) {
-            const ids = idsParam.split(',').filter(Boolean);
+            const ids = idsParam.split(",").filter(Boolean);
             if (ids.length === 0) {
                 res.json([]);
                 return;
@@ -33,7 +34,7 @@ exports.teamsRouter.get('/', async (req, res) => {
             for (const chunk of chunks) {
                 const snap = await admin_1.db
                     .collection(`leagues/${leagueId}/teams`)
-                    .where(admin_1.admin.firestore.FieldPath.documentId(), 'in', chunk)
+                    .where(admin_1.admin.firestore.FieldPath.documentId(), "in", chunk)
                     .get();
                 results.push(...snap.docs);
             }
@@ -42,7 +43,7 @@ exports.teamsRouter.get('/', async (req, res) => {
         else {
             const snap = await admin_1.db
                 .collection(`leagues/${leagueId}/teams`)
-                .orderBy('name', 'asc')
+                .orderBy("name", "asc")
                 .get();
             docs = snap.docs;
         }
@@ -50,26 +51,27 @@ exports.teamsRouter.get('/', async (req, res) => {
         res.json(teams);
     }
     catch (err) {
-        res.status(500).json({ error: 'Failed to fetch teams' });
+        res.status(500).json({ error: "Failed to fetch teams" });
+        console.log(err);
     }
 });
 // GET /api/leagues/:leagueId/teams/:teamId
-exports.teamsRouter.get('/:teamId', async (req, res) => {
+exports.teamsRouter.get("/:teamId", async (req, res) => {
     const { leagueId, teamId } = req.params;
     try {
         const snap = await admin_1.db.doc(`leagues/${leagueId}/teams/${teamId}`).get();
         if (!snap.exists) {
-            res.status(404).json({ error: 'Team not found' });
+            res.status(404).json({ error: "Team not found" });
             return;
         }
         res.json({ id: snap.id, ...(0, serialization_1.serializeDoc)(snap.data()) });
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to fetch team' });
+        res.status(500).json({ error: "Failed to fetch team" });
     }
 });
 // POST /api/leagues/:leagueId/teams
-exports.teamsRouter.post('/', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.teamsRouter.post("/", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     var _a;
     const parse = TeamSchema.safeParse(req.body);
     if (!parse.success) {
@@ -89,11 +91,11 @@ exports.teamsRouter.post('/', authenticate_1.authenticate, requireAdmin_1.requir
         res.status(201).json({ id: docRef.id });
     }
     catch (_b) {
-        res.status(500).json({ error: 'Failed to create team' });
+        res.status(500).json({ error: "Failed to create team" });
     }
 });
 // PATCH /api/leagues/:leagueId/teams/:teamId
-exports.teamsRouter.patch('/:teamId', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.teamsRouter.patch("/:teamId", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     const { leagueId, teamId } = req.params;
     const parse = TeamSchema.partial().safeParse(req.body);
     if (!parse.success) {
@@ -108,18 +110,18 @@ exports.teamsRouter.patch('/:teamId', authenticate_1.authenticate, requireAdmin_
         res.json({ id: teamId });
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to update team' });
+        res.status(500).json({ error: "Failed to update team" });
     }
 });
 // DELETE /api/leagues/:leagueId/teams/:teamId
-exports.teamsRouter.delete('/:teamId', authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
+exports.teamsRouter.delete("/:teamId", authenticate_1.authenticate, requireAdmin_1.requireAdmin, async (req, res) => {
     const { leagueId, teamId } = req.params;
     try {
         await admin_1.db.doc(`leagues/${leagueId}/teams/${teamId}`).delete();
         res.status(204).send();
     }
     catch (_a) {
-        res.status(500).json({ error: 'Failed to delete team' });
+        res.status(500).json({ error: "Failed to delete team" });
     }
 });
 //# sourceMappingURL=teams.router.js.map
