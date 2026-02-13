@@ -1,18 +1,12 @@
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
-  Timestamp,
-} from 'firebase/firestore';
-import { db } from '../../../app/firebase';
-import { COLLECTIONS } from '../../../shared/constants/firestore-paths';
-import { apiClient } from '../../../shared/services/apiClient';
-import type { Match, MatchFormValues, MatchScoreUpdate } from '../types/match.types';
-import type { Team } from '../../teams/types/team.types';
+import { Timestamp } from "firebase/firestore";
+import { apiClient } from "../../../shared/services/apiClient";
+import type {
+  Match,
+  MatchFormValues,
+  MatchScoreUpdate,
+} from "../types/match.types";
 
-type ApiMatch = Omit<Match, 'date' | 'createdAt' | 'updatedAt'> & {
+type ApiMatch = Omit<Match, "date" | "createdAt" | "updatedAt"> & {
   date: string;
   createdAt: string;
   updatedAt: string;
@@ -31,30 +25,20 @@ export const matchService = {
   getByMatchday: async (
     leagueId: string,
     tournamentId: string,
-    matchdayId: string
+    matchdayId: string,
   ): Promise<Match[]> => {
     const data = await apiClient.get<ApiMatch[]>(
-      `/leagues/${leagueId}/tournaments/${tournamentId}/matches?matchdayId=${matchdayId}`
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches?matchdayId=${matchdayId}`,
     );
     return data.map(toMatch);
   },
 
-  getAll: async (leagueId: string, tournamentId: string): Promise<Match[]> => {
-    const data = await apiClient.get<ApiMatch[]>(
-      `/leagues/${leagueId}/tournaments/${tournamentId}/matches`
-    );
-    return data.map(toMatch);
-  },
-
-  // homeTeam and awayTeam kept for API compatibility; backend denormalizes server-side
   create: async (
     leagueId: string,
     tournamentId: string,
     data: MatchFormValues,
     matchdayId: string,
     matchdayNumber: number,
-    _homeTeam?: Team,
-    _awayTeam?: Team
   ): Promise<string> => {
     const result = await apiClient.post<{ id: string }>(
       `/leagues/${leagueId}/tournaments/${tournamentId}/matches`,
@@ -66,7 +50,7 @@ export const matchService = {
         date: data.date,
         time: data.time,
         venue: data.venue,
-      }
+      },
     );
     return result.id;
   },
@@ -76,11 +60,11 @@ export const matchService = {
     tournamentId: string,
     matchId: string,
     homeScore: number,
-    awayScore: number
+    awayScore: number,
   ): Promise<void> => {
     await apiClient.patch(
       `/leagues/${leagueId}/tournaments/${tournamentId}/matches/${matchId}/score`,
-      { homeScore, awayScore }
+      { homeScore, awayScore },
     );
   },
 
@@ -88,11 +72,11 @@ export const matchService = {
     leagueId: string,
     tournamentId: string,
     scores: MatchScoreUpdate[],
-    matchdayId: string
+    matchdayId: string,
   ): Promise<void> => {
     await apiClient.patch(
       `/leagues/${leagueId}/tournaments/${tournamentId}/matches/scores-batch`,
-      { matchdayId, scores }
+      { matchdayId, scores },
     );
   },
 
@@ -100,27 +84,9 @@ export const matchService = {
     leagueId: string,
     tournamentId: string,
     matchId: string,
-    _matchdayId?: string
   ): Promise<void> => {
     await apiClient.delete(
-      `/leagues/${leagueId}/tournaments/${tournamentId}/matches/${matchId}`
+      `/leagues/${leagueId}/tournaments/${tournamentId}/matches/${matchId}`,
     );
-  },
-
-  subscribeByMatchday: (
-    leagueId: string,
-    tournamentId: string,
-    matchdayId: string,
-    callback: (matches: Match[]) => void
-  ) => {
-    const q = query(
-      collection(db, COLLECTIONS.MATCHES(leagueId, tournamentId)),
-      where('matchdayId', '==', matchdayId),
-      orderBy('date', 'asc')
-    );
-    return onSnapshot(q, (snapshot) => {
-      const matches = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Match));
-      callback(matches);
-    });
   },
 };

@@ -96,14 +96,11 @@ const MatchResultsPage: React.FC = () => {
   const handleCreateMatch = async () => {
     try {
       const values = await matchForm.validateFields();
-      const homeTeam = tournamentTeams.find(t => t.id === values.homeTeamId);
-      const awayTeam = tournamentTeams.find(t => t.id === values.awayTeamId);
-      if (!homeTeam || !awayTeam) return;
       const formData: MatchFormValues = {
         homeTeamId: values.homeTeamId, awayTeamId: values.awayTeamId,
         date: values.date.toISOString(), time: values.time?.format('HH:mm') || '00:00', venue: values.venue || '',
       };
-      await createMatch(formData, matchday?.number || 1, homeTeam, awayTeam);
+      await createMatch(formData, matchday?.number || 1);
       setMatchModalOpen(false);
       matchForm.resetFields();
     } catch (error) {

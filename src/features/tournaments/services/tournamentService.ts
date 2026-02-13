@@ -25,20 +25,6 @@ export const tournamentService = {
     return data.map(toTournament);
   },
 
-  getActive: async (leagueId: string): Promise<Tournament[]> => {
-    const data = await apiClient.get<ApiTournament[]>(`/leagues/${leagueId}/tournaments?status=active`);
-    return data.map(toTournament);
-  },
-
-  getById: async (leagueId: string, tournamentId: string): Promise<Tournament | null> => {
-    try {
-      const data = await apiClient.get<ApiTournament>(`/leagues/${leagueId}/tournaments/${tournamentId}`);
-      return toTournament(data);
-    } catch {
-      return null;
-    }
-  },
-
   create: async (leagueId: string, data: TournamentFormValues): Promise<string> => {
     const result = await apiClient.post<{ id: string }>(`/leagues/${leagueId}/tournaments`, data);
     return result.id;

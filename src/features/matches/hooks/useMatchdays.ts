@@ -1,52 +1,112 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useLeagueId } from '../../../shared/hooks/useLeagueId';
-import { matchdayService } from '../services/matchdayService';
-import type { Matchday, MatchdayFormValues } from '../types/match.types';
-import { message } from 'antd';
+import { useCallback } from "react";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  skipToken,
+} from "@tanstack/react-query";
+import { useLeagueId } from "../../../shared/hooks/useLeagueId";
+import { matchdayService } from "../services/matchdayService";
+import type { MatchdayFormValues } from "../types/match.types";
+import { message } from "antd";
+import { queryKeys } from "../../../shared/lib/queryKeys";
 
 export const useMatchdays = (tournamentId: string | undefined) => {
   const leagueId = useLeagueId();
-  const [matchdays, setMatchdays] = useState<Matchday[]>([]);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const fetchMatchdays = useCallback(async () => {
-    if (!tournamentId) return;
-    setLoading(true);
-    try {
-      const data = await matchdayService.getAll(leagueId, tournamentId);
-      setMatchdays(data);
-    } catch (error) {
-      message.error('Error al cargar jornadas');
+  const { data: matchdays = [], isLoading: loading } = useQuery({
+    queryKey: queryKeys.matchdays.all(leagueId, tournamentId ?? ""),
+    queryFn:
+      leagueId && tournamentId
+        ? () => matchdayService.getAll(leagueId, tournamentId)
+        : skipToken,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: (data: MatchdayFormValues) => {
+      if (!tournamentId) throw new Error("No tournament selected");
+      return matchdayService.create(leagueId, tournamentId, data);
+    },
+    onSuccess: () => {
+      message.success("Jornada creada");
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.matchdays.all(leagueId, tournamentId ?? ""),
+      });
+    },
+    onError: (error) => {
+      message.error("Error al crear jornada");
       console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [leagueId, tournamentId]);
+    },
+  });
 
-  useEffect(() => {
-    fetchMatchdays();
-  }, [fetchMatchdays]);
+  const updateMutation = useMutation({
+    mutationFn: ({
+      matchdayId,
+      data,
+    }: {
+      matchdayId: string;
+      data: Partial<MatchdayFormValues>;
+    }) => {
+      if (!tournamentId) throw new Error("No tournament selected");
+      return matchdayService.update(leagueId, tournamentId, matchdayId, data);
+    },
+    onSuccess: () => {
+      message.success("Jornada actualizada");
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.matchdays.all(leagueId, tournamentId ?? ""),
+      });
+    },
+    onError: (error) => {
+      message.error("Error al actualizar jornada");
+      console.error(error);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (matchdayId: string) => {
+      if (!tournamentId) throw new Error("No tournament selected");
+      return matchdayService.delete(leagueId, tournamentId, matchdayId);
+    },
+    onSuccess: () => {
+      message.success("Jornada eliminada");
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.matchdays.all(leagueId, tournamentId ?? ""),
+      });
+    },
+    onError: (error) => {
+      message.error("Error al eliminar jornada");
+      console.error(error);
+    },
+  });
+
+  const fetchMatchdays = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.matchdays.all(leagueId, tournamentId ?? ""),
+    });
+  }, [queryClient, leagueId, tournamentId]);
 
   const createMatchday = async (data: MatchdayFormValues) => {
-    if (!tournamentId) return;
-    await matchdayService.create(leagueId, tournamentId, data);
-    message.success('Jornada creada');
-    await fetchMatchdays();
+    return createMutation.mutateAsync(data);
   };
 
-  const updateMatchday = async (matchdayId: string, data: Partial<MatchdayFormValues>) => {
-    if (!tournamentId) return;
-    await matchdayService.update(leagueId, tournamentId, matchdayId, data);
-    message.success('Jornada actualizada');
-    await fetchMatchdays();
+  const updateMatchday = async (
+    matchdayId: string,
+    data: Partial<MatchdayFormValues>,
+  ) => {
+    return updateMutation.mutateAsync({ matchdayId, data });
   };
 
   const deleteMatchday = async (matchdayId: string) => {
-    if (!tournamentId) return;
-    await matchdayService.delete(leagueId, tournamentId, matchdayId);
-    message.success('Jornada eliminada');
-    await fetchMatchdays();
+    return deleteMutation.mutateAsync(matchdayId);
   };
 
-  return { matchdays, loading, fetchMatchdays, createMatchday, updateMatchday, deleteMatchday };
+  return {
+    matchdays,
+    loading,
+    fetchMatchdays,
+    createMatchday,
+    updateMatchday,
+    deleteMatchday,
+  };
 };

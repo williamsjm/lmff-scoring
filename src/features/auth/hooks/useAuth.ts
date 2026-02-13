@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { useQueryClient } from '@tanstack/react-query';
 import { auth } from '../../../app/firebase';
 import { useAuthContext } from '../context/AuthContext';
 import { message } from 'antd';
 
 export const useAuth = () => {
   const { user, firebaseUser, loading, isAdmin } = useAuthContext();
+  const queryClient = useQueryClient();
   const [loginLoading, setLoginLoading] = useState(false);
 
   const login = async (email: string, password: string) => {
@@ -32,6 +34,7 @@ export const useAuth = () => {
   const logout = async () => {
     try {
       await signOut(auth);
+      queryClient.clear();
       message.success('Sesion cerrada');
     } catch {
       message.error('Error al cerrar sesion');

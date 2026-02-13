@@ -1,50 +1,120 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useLeagueId } from '../../../shared/hooks/useLeagueId';
-import { playerService } from '../services/playerService';
-import type { Player, PlayerFormValues } from '../types/player.types';
-import { message } from 'antd';
+import { useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLeagueId } from "../../../shared/hooks/useLeagueId";
+import { playerService } from "../services/playerService";
+import type { Player, PlayerFormValues } from "../types/player.types";
+import { message } from "antd";
+import { queryKeys } from "../../../shared/lib/queryKeys";
 
 export const usePlayers = (teamId?: string) => {
   const leagueId = useLeagueId();
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchPlayers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = teamId
-        ? await playerService.getByTeam(leagueId, teamId)
-        : await playerService.getAll(leagueId);
-      setPlayers(data);
-    } catch (error) {
-      message.error('Error al cargar jugadores');
+  const { data: players = [], isLoading: loading } = useQuery({
+    queryKey: queryKeys.players.all(leagueId, teamId),
+    queryFn: () =>
+      teamId
+        ? playerService.getByTeam(leagueId, teamId)
+        : playerService.getAll(leagueId),
+    enabled: !!leagueId,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async ({
+      data,
+      teamName,
+    }: {
+      data: PlayerFormValues;
+      teamName: string;
+    }) => {
+      return playerService.create(leagueId, data, teamName);
+    },
+    onSuccess: () => {
+      message.success("Jugador registrado exitosamente");
+      queryClient.invalidateQueries({
+        queryKey: ["players", leagueId],
+      });
+    },
+    onError: (error) => {
+      message.error("Error al crear jugador");
       console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [leagueId, teamId]);
+    },
+  });
 
-  useEffect(() => {
-    fetchPlayers();
-  }, [fetchPlayers]);
+  const updateMutation = useMutation({
+    mutationFn: async ({
+      playerId,
+      data,
+      teamName,
+    }: {
+      playerId: string;
+      data: Partial<PlayerFormValues>;
+      teamName?: string;
+    }) => {
+      return playerService.update(leagueId, playerId, data, teamName);
+    },
+    onSuccess: () => {
+      message.success("Jugador actualizado");
+      queryClient.invalidateQueries({
+        queryKey: ["players", leagueId],
+      });
+    },
+    onError: (error) => {
+      message.error("Error al actualizar jugador");
+      console.error(error);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async ({
+      playerId,
+      playerTeamId,
+    }: {
+      playerId: string;
+      playerTeamId: string;
+    }) => {
+      return playerService.delete(leagueId, playerId, playerTeamId);
+    },
+    onSuccess: () => {
+      message.success("Jugador eliminado");
+      queryClient.invalidateQueries({
+        queryKey: ["players", leagueId],
+      });
+    },
+    onError: (error) => {
+      message.error("Error al eliminar jugador");
+      console.error(error);
+    },
+  });
+
+  const fetchPlayers = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["players", leagueId],
+    });
+  }, [queryClient, leagueId]);
 
   const createPlayer = async (data: PlayerFormValues, teamName: string) => {
-    await playerService.create(leagueId, data, teamName);
-    message.success('Jugador registrado exitosamente');
-    await fetchPlayers();
+    return createMutation.mutateAsync({ data, teamName });
   };
 
-  const updatePlayer = async (playerId: string, data: Partial<PlayerFormValues>, teamName?: string) => {
-    await playerService.update(leagueId, playerId, data, teamName);
-    message.success('Jugador actualizado');
-    await fetchPlayers();
+  const updatePlayer = async (
+    playerId: string,
+    data: Partial<PlayerFormValues>,
+    teamName?: string,
+  ) => {
+    return updateMutation.mutateAsync({ playerId, data, teamName });
   };
 
   const deletePlayer = async (playerId: string, playerTeamId: string) => {
-    await playerService.delete(leagueId, playerId, playerTeamId);
-    message.success('Jugador eliminado');
-    await fetchPlayers();
+    return deleteMutation.mutateAsync({ playerId, playerTeamId });
   };
 
-  return { players, loading, fetchPlayers, createPlayer, updatePlayer, deletePlayer };
+  return {
+    players,
+    loading,
+    fetchPlayers,
+    createPlayer,
+    updatePlayer,
+    deletePlayer,
+  };
 };

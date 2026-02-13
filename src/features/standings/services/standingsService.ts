@@ -29,7 +29,8 @@ export const standingsService = {
   subscribe: (
     leagueId: string,
     tournamentId: string,
-    callback: (standings: Standing[]) => void
+    callback: (standings: Standing[]) => void,
+    onError?: (error: Error) => void
   ) => {
     const q = query(
       collection(db, COLLECTIONS.STANDINGS(leagueId, tournamentId)),
@@ -44,6 +45,8 @@ export const standingsService = {
         rank: index + 1,
       } as Standing));
       callback(standings);
+    }, (error) => {
+      if (onError) onError(error);
     });
   },
 

@@ -10,15 +10,6 @@ export const playerService = {
     return apiClient.get<Player[]>(`/leagues/${leagueId}/players?teamId=${teamId}`);
   },
 
-  getById: async (leagueId: string, playerId: string): Promise<Player | null> => {
-    try {
-      return await apiClient.get<Player>(`/leagues/${leagueId}/players/${playerId}`);
-    } catch {
-      return null;
-    }
-  },
-
-  // teamName is kept for API compatibility but the backend resolves it server-side
   create: async (leagueId: string, data: PlayerFormValues, _teamName?: string): Promise<string> => {
     const result = await apiClient.post<{ id: string }>(`/leagues/${leagueId}/players`, data);
     return result.id;

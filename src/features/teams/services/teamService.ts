@@ -1,4 +1,4 @@
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../app/firebase';
 import { apiClient } from '../../../shared/services/apiClient';
 import type { Team, TeamFormValues } from '../types/team.types';
@@ -6,19 +6,6 @@ import type { Team, TeamFormValues } from '../types/team.types';
 export const teamService = {
   getAll: async (leagueId: string): Promise<Team[]> => {
     return apiClient.get<Team[]>(`/leagues/${leagueId}/teams`);
-  },
-
-  getById: async (leagueId: string, teamId: string): Promise<Team | null> => {
-    try {
-      return await apiClient.get<Team>(`/leagues/${leagueId}/teams/${teamId}`);
-    } catch {
-      return null;
-    }
-  },
-
-  getByIds: async (leagueId: string, teamIds: string[]): Promise<Team[]> => {
-    if (teamIds.length === 0) return [];
-    return apiClient.get<Team[]>(`/leagues/${leagueId}/teams?ids=${teamIds.join(',')}`);
   },
 
   create: async (leagueId: string, data: TeamFormValues): Promise<string> => {
@@ -39,14 +26,5 @@ export const teamService = {
     const storageRef = ref(storage, `team-logos/${leagueId}/${fileName}`);
     await uploadBytes(storageRef, file);
     return getDownloadURL(storageRef);
-  },
-
-  deleteLogo: async (logoUrl: string): Promise<void> => {
-    try {
-      const storageRef = ref(storage, logoUrl);
-      await deleteObject(storageRef);
-    } catch {
-      // Logo may not exist
-    }
   },
 };
