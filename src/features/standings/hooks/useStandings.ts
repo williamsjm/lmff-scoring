@@ -45,10 +45,12 @@ export const useStandings = (
   // Efecto para realtime (onSnapshot)
   useEffect(() => {
     if (!tournamentId || !realtime) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRealtimeLoading(false);
       return;
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRealtimeLoading(true);
     const unsubscribe = standingsService.subscribe(
       leagueId,

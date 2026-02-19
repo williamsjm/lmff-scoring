@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, Row, Col, Button, Space } from 'antd';
+import { Typography, Card, Row, Col, Button } from 'antd';
 import { OrderedListOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../shared/constants/routes';

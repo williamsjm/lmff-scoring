@@ -22,6 +22,7 @@ const ResultsPage: React.FC = () => {
   useEffect(() => {
     if (!selectedMatchdayId && matchdays.length > 0) {
       const lastCompleted = [...matchdays].reverse().find(m => m.status === 'completed' || m.status === 'in_progress');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedMatchdayId(lastCompleted?.id || matchdays[matchdays.length - 1]?.id);
     }
   }, [matchdays, selectedMatchdayId]);

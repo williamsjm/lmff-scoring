@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLeagueId } from "../../../shared/hooks/useLeagueId";
 import { playerService } from "../services/playerService";
-import type { Player, PlayerFormValues } from "../types/player.types";
+import type { PlayerFormValues } from "../types/player.types";
 import { message } from "antd";
 import { queryKeys } from "../../../shared/lib/queryKeys";
 

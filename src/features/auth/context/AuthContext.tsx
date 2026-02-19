@@ -25,6 +25,7 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

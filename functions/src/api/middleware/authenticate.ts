@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { admin } from '../../admin';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: { uid: string; role: string | null; leagueId: string | null };
