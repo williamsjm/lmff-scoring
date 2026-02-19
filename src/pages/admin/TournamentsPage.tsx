@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Typography, Modal, Form, Input, Select, DatePicker, InputNumber, Tag, Popconfirm, Transfer } from 'antd';
+import { Button, Space, Typography, Modal, Form, Input, Select, DatePicker, InputNumber, Tag, Popconfirm, Transfer } from 'antd';
+import { AdminTable } from '../../shared/components/AdminTable';
 import { PlusOutlined, EditOutlined, DeleteOutlined, CalendarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTournaments } from '../../features/tournaments/hooks/useTournaments';
@@ -94,7 +95,7 @@ const TournamentsPage: React.FC = () => {
         <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenCreate}>Nuevo Torneo</Button>
       </div>
 
-      <Table columns={columns} dataSource={tournaments} rowKey="id" loading={loading} scroll={{ x: 700 }} />
+      <AdminTable columns={columns} dataSource={tournaments} loading={loading} scroll={{ x: 700 }} />
 
       <Modal title={editingTournament ? 'Editar Torneo' : 'Nuevo Torneo'} open={modalOpen} onOk={handleSubmit}
         onCancel={() => setModalOpen(false)} confirmLoading={saving} okText={editingTournament ? 'Guardar' : 'Crear'} cancelText="Cancelar" width={700}>

@@ -14,7 +14,7 @@ export const AdminLayout: React.FC = () => {
       <AdminSidebar collapsed={collapsed} onCollapse={setCollapsed} />
       <Layout>
         <AdminHeader collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
-        <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', borderRadius: 8, minHeight: 280 }}>
+        <Content style={{ margin: 0, padding: '32px 40px', background: '#f8fafc', minHeight: 'calc(100vh - 64px)' }}>
           <Outlet />
         </Content>
       </Layout>

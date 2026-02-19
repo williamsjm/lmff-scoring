@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Table,
   Button,
   Space,
   Typography,
@@ -14,6 +13,7 @@ import {
   Avatar,
   Switch,
 } from "antd";
+import { AdminTable } from "../../shared/components/AdminTable";
 import {
   PlusOutlined,
   EditOutlined,
@@ -116,16 +116,20 @@ const TeamsPage: React.FC = () => {
       title: "Color",
       dataIndex: "color",
       key: "color",
-      width: 80,
+      width: 110,
       render: (color: string) => (
-        <div
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: 4,
-            backgroundColor: color,
-          }}
-        />
+        <Space size={8}>
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 3,
+              backgroundColor: color,
+              flexShrink: 0,
+            }}
+          />
+          <span className="admin-table-mono" style={{ fontSize: 12 }}>{color}</span>
+        </Space>
       ),
     },
     {
@@ -134,6 +138,9 @@ const TeamsPage: React.FC = () => {
       key: "playerCount",
       width: 100,
       align: "center",
+      render: (count: number) => (
+        <span className="admin-table-mono">{count ?? 0}</span>
+      ),
     },
     {
       title: "Estado",
@@ -149,12 +156,13 @@ const TeamsPage: React.FC = () => {
     {
       title: "Acciones",
       key: "actions",
-      width: 120,
+      width: 100,
+      align: "right",
       render: (_: unknown, record: Team) => (
         <Space>
           <Button
-            type="link"
-            icon={<EditOutlined />}
+            type="text"
+            icon={<EditOutlined style={{ color: '#999999' }} />}
             onClick={() => handleOpenEdit(record)}
           />
           <Popconfirm
@@ -165,7 +173,7 @@ const TeamsPage: React.FC = () => {
             cancelText="Cancelar"
             okButtonProps={{ danger: true }}
           >
-            <Button type="link" danger icon={<DeleteOutlined />} />
+            <Button type="text" icon={<DeleteOutlined style={{ color: '#999999' }} />} />
           </Popconfirm>
         </Space>
       ),
@@ -206,13 +214,10 @@ const TeamsPage: React.FC = () => {
         </Space>
       </div>
 
-      <Table
+      <AdminTable
         columns={columns}
         dataSource={filteredTeams}
-        rowKey="id"
         loading={loading}
-        pagination={{ pageSize: 10 }}
-        scroll={{ x: 600 }}
       />
 
       <Modal

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 * {
   margin: 0;
@@ -39,4 +39,31 @@ body {
 .matchday-nav {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Admin table: consistent design-system style */
+.admin-table .ant-table-thead > tr > th {
+  font-family: 'IBM Plex Mono', monospace !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  height: 44px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.admin-table .ant-table-tbody > tr > td {
+  padding-block: 14px !important;
+}
+
+.admin-table .ant-table {
+  border: 1px solid #E5E5E5;
+  border-radius: 8px;
+}
+
+.admin-table-mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
 }
