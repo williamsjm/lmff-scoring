@@ -7,7 +7,7 @@ export interface Team extends BaseDocument {
   captainId: string | null;
   captainName: string | null;
   playerCount: number;
-  active: boolean;
+  isActive: boolean;
 }
 
 export interface TeamFormValues {
@@ -16,5 +16,5 @@ export interface TeamFormValues {
   logo?: string | null;
   captainId?: string | null;
   captainName?: string | null;
-  active: boolean;
+  isActive: boolean;
 }

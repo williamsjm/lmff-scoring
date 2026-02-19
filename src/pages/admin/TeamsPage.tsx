@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  Table, Button, Space, Typography, Input, Modal, Form,
-  ColorPicker, Upload, Tag, Popconfirm, Avatar, Switch,
-} from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, UploadOutlined, SearchOutlined } from '@ant-design/icons';
-import { useTeams } from '../../features/teams/hooks/useTeams';
-import type { Team, TeamFormValues } from '../../features/teams/types/team.types';
-import type { ColumnsType } from 'antd/es/table';
-import type { UploadFile } from 'antd/es/upload';
+  Table,
+  Button,
+  Space,
+  Typography,
+  Input,
+  Modal,
+  Form,
+  ColorPicker,
+  Upload,
+  Tag,
+  Popconfirm,
+  Avatar,
+  Switch,
+} from "antd";
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { useTeams } from "../../features/teams/hooks/useTeams";
+import type {
+  Team,
+  TeamFormValues,
+} from "../../features/teams/types/team.types";
+import type { ColumnsType } from "antd/es/table";
+import type { UploadFile } from "antd/es/upload";
 
 const { Title } = Typography;
 
@@ -16,25 +36,29 @@ const TeamsPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
   const [form] = Form.useForm();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [saving, setSaving] = useState(false);
 
-  const filteredTeams = teams.filter(t =>
-    t.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredTeams = teams.filter((t) =>
+    t.name.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   const handleOpenCreate = () => {
     setEditingTeam(null);
     form.resetFields();
-    form.setFieldsValue({ active: true, color: '#1B3C73' });
+    form.setFieldsValue({ isActive: true, color: "#1B3C73" });
     setFileList([]);
     setModalOpen(true);
   };
 
   const handleOpenEdit = (team: Team) => {
     setEditingTeam(team);
-    form.setFieldsValue({ name: team.name, color: team.color, active: team.active });
+    form.setFieldsValue({
+      name: team.name,
+      color: team.color,
+      isActive: team.isActive,
+    });
     setFileList([]);
     setModalOpen(true);
   };
@@ -42,10 +66,19 @@ const TeamsPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
+
       setSaving(true);
-      const colorValue = typeof values.color === 'string' ? values.color :
-        typeof values.color?.toHexString === 'function' ? values.color.toHexString() : '#1B3C73';
-      const formData: TeamFormValues = { name: values.name, color: colorValue, active: values.active };
+      const colorValue =
+        typeof values.color === "string"
+          ? values.color
+          : typeof values.color?.toHexString === "function"
+            ? values.color.toHexString()
+            : "#1B3C73";
+      const formData: TeamFormValues = {
+        name: values.name,
+        color: colorValue,
+        isActive: values.isActive,
+      };
       const logoFile = fileList[0]?.originFileObj as File | undefined;
 
       if (editingTeam) {
@@ -63,30 +96,75 @@ const TeamsPage: React.FC = () => {
 
   const columns: ColumnsType<Team> = [
     {
-      title: 'Equipo', dataIndex: 'name', key: 'name',
+      title: "Equipo",
+      dataIndex: "name",
+      key: "name",
       render: (name: string, record: Team) => (
         <Space>
-          <Avatar src={record.logo} style={{ backgroundColor: record.color }} size="small">{name.charAt(0)}</Avatar>
+          <Avatar
+            src={record.logo}
+            style={{ backgroundColor: record.color }}
+            size="small"
+          >
+            {name.charAt(0)}
+          </Avatar>
           {name}
         </Space>
       ),
     },
     {
-      title: 'Color', dataIndex: 'color', key: 'color', width: 80,
-      render: (color: string) => <div style={{ width: 24, height: 24, borderRadius: 4, backgroundColor: color }} />,
+      title: "Color",
+      dataIndex: "color",
+      key: "color",
+      width: 80,
+      render: (color: string) => (
+        <div
+          style={{
+            width: 24,
+            height: 24,
+            borderRadius: 4,
+            backgroundColor: color,
+          }}
+        />
+      ),
     },
-    { title: 'Jugadores', dataIndex: 'playerCount', key: 'playerCount', width: 100, align: 'center' },
     {
-      title: 'Estado', dataIndex: 'active', key: 'active', width: 100,
-      render: (active: boolean) => <Tag color={active ? 'green' : 'red'}>{active ? 'Activo' : 'Inactivo'}</Tag>,
+      title: "Jugadores",
+      dataIndex: "playerCount",
+      key: "playerCount",
+      width: 100,
+      align: "center",
     },
     {
-      title: 'Acciones', key: 'actions', width: 120,
+      title: "Estado",
+      dataIndex: "isActive",
+      key: "isActive",
+      width: 100,
+      render: (isActive: boolean) => (
+        <Tag color={isActive ? "green" : "red"}>
+          {isActive ? "Activo" : "Inactivo"}
+        </Tag>
+      ),
+    },
+    {
+      title: "Acciones",
+      key: "actions",
+      width: 120,
       render: (_: unknown, record: Team) => (
         <Space>
-          <Button type="link" icon={<EditOutlined />} onClick={() => handleOpenEdit(record)} />
-          <Popconfirm title="Eliminar equipo" description="Esta accion no se puede deshacer"
-            onConfirm={() => deleteTeam(record.id)} okText="Eliminar" cancelText="Cancelar" okButtonProps={{ danger: true }}>
+          <Button
+            type="link"
+            icon={<EditOutlined />}
+            onClick={() => handleOpenEdit(record)}
+          />
+          <Popconfirm
+            title="Eliminar equipo"
+            description="Esta accion no se puede deshacer"
+            onConfirm={() => deleteTeam(record.id)}
+            okText="Eliminar"
+            cancelText="Cancelar"
+            okButtonProps={{ danger: true }}
+          >
             <Button type="link" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
@@ -96,33 +174,80 @@ const TeamsPage: React.FC = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-        <Title level={4} style={{ margin: 0 }}>Equipos</Title>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        <Title level={4} style={{ margin: 0 }}>
+          Equipos
+        </Title>
         <Space>
-          <Input placeholder="Buscar equipo..." prefix={<SearchOutlined />} value={searchText}
-            onChange={e => setSearchText(e.target.value)} style={{ width: 200 }} allowClear />
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenCreate}>Nuevo Equipo</Button>
+          <Input
+            placeholder="Buscar equipo..."
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ width: 200 }}
+            allowClear
+          />
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={handleOpenCreate}
+          >
+            Nuevo Equipo
+          </Button>
         </Space>
       </div>
 
-      <Table columns={columns} dataSource={filteredTeams} rowKey="id" loading={loading} pagination={{ pageSize: 10 }} scroll={{ x: 600 }} />
+      <Table
+        columns={columns}
+        dataSource={filteredTeams}
+        rowKey="id"
+        loading={loading}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: 600 }}
+      />
 
-      <Modal title={editingTeam ? 'Editar Equipo' : 'Nuevo Equipo'} open={modalOpen} onOk={handleSubmit}
-        onCancel={() => setModalOpen(false)} confirmLoading={saving} okText={editingTeam ? 'Guardar' : 'Crear'} cancelText="Cancelar">
+      <Modal
+        title={editingTeam ? "Editar Equipo" : "Nuevo Equipo"}
+        open={modalOpen}
+        onOk={handleSubmit}
+        onCancel={() => setModalOpen(false)}
+        confirmLoading={saving}
+        okText={editingTeam ? "Guardar" : "Crear"}
+        cancelText="Cancelar"
+      >
         <Form form={form} layout="vertical">
-          <Form.Item name="name" label="Nombre del equipo" rules={[{ required: true, message: 'Ingresa el nombre' }]}>
+          <Form.Item
+            name="name"
+            label="Nombre del equipo"
+            rules={[{ required: true, message: "Ingresa el nombre" }]}
+          >
             <Input placeholder="Ej: Halcones FC" />
           </Form.Item>
           <Form.Item name="color" label="Color del equipo">
             <ColorPicker />
           </Form.Item>
           <Form.Item label="Logo del equipo">
-            <Upload fileList={fileList} onChange={({ fileList }) => setFileList(fileList)}
-              beforeUpload={() => false} maxCount={1} accept="image/*" listType="picture">
+            <Upload
+              fileList={fileList}
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={() => false}
+              maxCount={1}
+              accept="image/*"
+              listType="picture"
+            >
               <Button icon={<UploadOutlined />}>Subir logo</Button>
             </Upload>
           </Form.Item>
-          <Form.Item name="active" label="Activo" valuePropName="checked">
+          <Form.Item name="isActive" label="Activo" valuePropName="checked">
             <Switch />
           </Form.Item>
         </Form>

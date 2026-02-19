@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Typography, Select, Modal, Form, Input, InputNumber, Tag, Popconfirm, Switch } from 'antd';
+import { Table, Button, Space, Typography, Select, Modal, Form, Input, InputNumber, Tag, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { usePlayers } from '../../features/players/hooks/usePlayers';
 import { useTeams } from '../../features/teams/hooks/useTeams';
@@ -21,7 +21,6 @@ const PlayersPage: React.FC = () => {
   const handleOpenCreate = () => {
     setEditingPlayer(null);
     form.resetFields();
-    form.setFieldsValue({ active: true });
     setModalOpen(true);
   };
 
@@ -29,7 +28,7 @@ const PlayersPage: React.FC = () => {
     setEditingPlayer(player);
     form.setFieldsValue({
       name: player.name, number: player.number, position: player.position,
-      teamId: player.teamId, active: player.active,
+      teamId: player.teamId,
     });
     setModalOpen(true);
   };
@@ -41,7 +40,7 @@ const PlayersPage: React.FC = () => {
       const team = teams.find(t => t.id === values.teamId);
       const formData: PlayerFormValues = {
         name: values.name, number: values.number, position: values.position,
-        teamId: values.teamId, active: values.active,
+        teamId: values.teamId,
       };
       if (editingPlayer) {
         await updatePlayer(editingPlayer.id, formData, team?.name);
@@ -61,7 +60,6 @@ const PlayersPage: React.FC = () => {
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Posicion', dataIndex: 'position', key: 'position', width: 80, render: (pos: string) => <Tag>{pos}</Tag> },
     { title: 'Equipo', dataIndex: 'teamName', key: 'teamName' },
-    { title: 'Estado', dataIndex: 'active', key: 'active', width: 90, render: (active: boolean) => <Tag color={active ? 'green' : 'red'}>{active ? 'Activo' : 'Inactivo'}</Tag> },
     {
       title: 'Acciones', key: 'actions', width: 120,
       render: (_: unknown, record: Player) => (
@@ -105,9 +103,6 @@ const PlayersPage: React.FC = () => {
           </Space>
           <Form.Item name="teamId" label="Equipo" rules={[{ required: true, message: 'Requerido' }]}>
             <Select placeholder="Seleccionar equipo" options={teams.map(t => ({ value: t.id, label: t.name }))} />
-          </Form.Item>
-          <Form.Item name="active" label="Activo" valuePropName="checked">
-            <Switch />
           </Form.Item>
         </Form>
       </Modal>

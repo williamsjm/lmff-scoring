@@ -9,7 +9,6 @@ export interface Player extends BaseDocument {
   teamId: string;
   teamName: string;
   userId: string | null;
-  active: boolean;
 }
 
 export interface PlayerFormValues {
@@ -17,7 +16,6 @@ export interface PlayerFormValues {
   number: number;
   position: PlayerPosition;
   teamId: string;
-  active: boolean;
 }
 
 export const POSITION_OPTIONS: { value: PlayerPosition; label: string }[] = [

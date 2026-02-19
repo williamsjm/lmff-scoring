@@ -146,7 +146,7 @@ export const useMatchesByMatchday = (
     mutationFn: (matchId: string) => {
       if (!tournamentId || !matchdayId)
         throw new Error("Missing tournament or matchday");
-      return matchService.delete(leagueId, tournamentId, matchId, matchdayId);
+      return matchService.delete(leagueId, tournamentId, matchId);
     },
     onSuccess: () => {
       message.success("Partido eliminado");
