@@ -19,10 +19,14 @@ export const theme: ThemeConfig = {
       darkItemSelectedBg: '#1B3C73',
     },
     Table: {
-      headerBg: '#1B3C73',
-      headerColor: '#ffffff',
-      headerSortActiveBg: '#15305c',
-      headerSortHoverBg: '#15305c',
+      headerBg: '#F5F5F5',
+      headerColor: '#5E5E5E',
+      headerSortActiveBg: '#EBEBEB',
+      headerSortHoverBg: '#EBEBEB',
+      headerSplitColor: '#E5E5E5',
+      cellPaddingInline: 20,
+      borderColor: '#E5E5E5',
+      rowHoverBg: '#FAFAFA',
     },
     Button: {
       primaryShadow: '0 2px 0 rgba(27, 60, 115, 0.1)',

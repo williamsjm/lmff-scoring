@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Typography, Modal, Form, Input, InputNumber, DatePicker, Select, Tag, Popconfirm, Breadcrumb } from 'antd';
+import { Button, Space, Typography, Modal, Form, Input, InputNumber, DatePicker, Select, Tag, Popconfirm, Breadcrumb } from 'antd';
+import { AdminTable } from '../../shared/components/AdminTable';
 import { PlusOutlined, EditOutlined, DeleteOutlined, FileTextOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useMatchdays } from '../../features/matches/hooks/useMatchdays';
@@ -94,7 +95,7 @@ const MatchdaysPage: React.FC = () => {
         <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenCreate}>Nueva Jornada</Button>
       </div>
 
-      <Table columns={columns} dataSource={matchdays} rowKey="id" loading={loading} scroll={{ x: 600 }} />
+      <AdminTable columns={columns} dataSource={matchdays} loading={loading} />
 
       <Modal title={editingMd ? 'Editar Jornada' : 'Nueva Jornada'} open={modalOpen} onOk={handleSubmit}
         onCancel={() => setModalOpen(false)} confirmLoading={saving} okText={editingMd ? 'Guardar' : 'Crear'} cancelText="Cancelar">

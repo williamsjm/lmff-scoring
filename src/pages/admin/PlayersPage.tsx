@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Typography, Select, Modal, Form, Input, InputNumber, Tag, Popconfirm } from 'antd';
+import { Button, Space, Typography, Select, Modal, Form, Input, InputNumber, Tag, Popconfirm } from 'antd';
+import { AdminTable } from '../../shared/components/AdminTable';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { usePlayers } from '../../features/players/hooks/usePlayers';
 import { useTeams } from '../../features/teams/hooks/useTeams';
@@ -56,7 +57,7 @@ const PlayersPage: React.FC = () => {
   };
 
   const columns: ColumnsType<Player> = [
-    { title: '#', dataIndex: 'number', key: 'number', width: 60, align: 'center' },
+    { title: '#', dataIndex: 'number', key: 'number', width: 60, align: 'center', render: (n: number) => <span className="admin-table-mono">{n}</span> },
     { title: 'Nombre', dataIndex: 'name', key: 'name' },
     { title: 'Posicion', dataIndex: 'position', key: 'position', width: 80, render: (pos: string) => <Tag>{pos}</Tag> },
     { title: 'Equipo', dataIndex: 'teamName', key: 'teamName' },
@@ -85,7 +86,7 @@ const PlayersPage: React.FC = () => {
         </Space>
       </div>
 
-      <Table columns={columns} dataSource={players} rowKey="id" loading={loading} pagination={{ pageSize: 15 }} scroll={{ x: 600 }} />
+      <AdminTable columns={columns} dataSource={players} loading={loading} pagination={{ pageSize: 15, showSizeChanger: false }} />
 
       <Modal title={editingPlayer ? 'Editar Jugador' : 'Nuevo Jugador'} open={modalOpen} onOk={handleSubmit}
         onCancel={() => setModalOpen(false)} confirmLoading={saving} okText={editingPlayer ? 'Guardar' : 'Crear'} cancelText="Cancelar">
