@@ -1,5 +1,5 @@
 import React from "react";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App } from "antd";
 import esES from "antd/locale/es_ES";
 import { theme } from "../styles/theme";
 import { AuthProvider } from "../features/auth/context/AuthContext";
@@ -25,9 +25,11 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={theme} locale={esES}>
-        <BrowserRouter>
-          <AuthProvider>{children}</AuthProvider>
-        </BrowserRouter>
+        <App>
+          <BrowserRouter>
+            <AuthProvider>{children}</AuthProvider>
+          </BrowserRouter>
+        </App>
       </ConfigProvider>
       {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
