@@ -1,15 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Trophy, ListOrdered, BarChart3, Home, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ROUTES } from '../../shared/constants/routes';
-import { usePublicLeague } from '../../features/leagues/context/PublicLeagueContext';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Menu,
+  X,
+  Trophy,
+  ListOrdered,
+  BarChart3,
+  Home,
+  ChevronDown,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ROUTES } from "../../shared/constants/routes";
+import { usePublicLeague } from "../../features/leagues/context/PublicLeagueContext";
 
 const navLinks = [
-  { to: ROUTES.HOME, label: 'Inicio', icon: Home },
-  { to: ROUTES.STANDINGS, label: 'Posiciones', icon: ListOrdered },
-  { to: ROUTES.RESULTS, label: 'Resultados', icon: Trophy },
-  { to: ROUTES.STATS, label: 'Estadísticas', icon: BarChart3 },
+  { to: ROUTES.HOME, label: "Inicio", icon: Home },
+  { to: ROUTES.STANDINGS, label: "Posiciones", icon: ListOrdered },
+  { to: ROUTES.RESULTS, label: "Resultados", icon: Trophy },
+  { to: ROUTES.STATS, label: "Estadísticas", icon: BarChart3 },
 ];
 
 export function Navbar() {
@@ -26,74 +34,71 @@ export function Navbar() {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <nav
       style={{
-        position: 'sticky',
+        position: "sticky",
         top: 0,
         zIndex: 50,
-        background: '#1B3C73',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+        background: "#1B3C73",
+        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
       }}
     >
       <div
         style={{
           maxWidth: 1200,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 64,
-          paddingLeft: 16,
-          paddingRight: 16,
+          margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 80,
+          paddingLeft: 24,
+          paddingRight: 24,
         }}
       >
         {/* Logo */}
         <Link
           to={ROUTES.HOME}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            textDecoration: 'none',
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            textDecoration: "none",
+            marginRight: 24,
           }}
         >
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              background: '#D4AF37',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              background: "#FFFFFF",
+              borderRadius: 8,
+              padding: 4,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Trophy size={20} color="#1B3C73" />
+            <img
+              src="/lmff_logo.png"
+              alt="Liga Metropolitana FF"
+              style={{
+                height: 40,
+                width: "auto",
+                objectFit: "contain",
+              }}
+            />
           </div>
-          <span
-            style={{
-              fontWeight: 'bold',
-              fontSize: '1.25rem',
-              letterSpacing: '0.05em',
-              color: '#FFFFFF',
-              display: isMobile ? 'none' : 'inline-block',
-            }}
-          >
-            LMFF
-          </span>
         </Link>
 
         {/* Desktop Nav */}
         <div
           style={{
-            display: isMobile ? 'none' : 'flex',
+            display: isMobile ? "none" : "flex",
             gap: 4,
-            alignItems: 'center',
+            alignItems: "center",
             flex: 1,
           }}
         >
@@ -105,32 +110,33 @@ export function Navbar() {
                 key={link.to}
                 to={link.to}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
+                  display: "flex",
+                  alignItems: "center",
                   gap: 8,
-                  paddingLeft: 16,
-                  paddingRight: 16,
-                  paddingTop: 8,
-                  paddingBottom: 8,
+                  paddingLeft: 18,
+                  paddingRight: 18,
+                  paddingTop: 10,
+                  paddingBottom: 10,
                   borderRadius: 6,
-                  fontSize: '0.875rem',
+                  fontSize: "0.875rem",
                   fontWeight: 500,
-                  transition: 'all 200ms',
-                  textDecoration: 'none',
-                  background: isActive ? '#D4AF37' : 'transparent',
-                  color: isActive ? '#1B3C73' : 'rgba(255, 255, 255, 0.8)',
-                  cursor: 'pointer',
+                  transition: "all 200ms",
+                  textDecoration: "none",
+                  background: isActive ? "#D4AF37" : "transparent",
+                  color: isActive ? "#1B3C73" : "rgba(255, 255, 255, 0.8)",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'rgba(27, 60, 115, 0.1)';
-                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(27, 60, 115, 0.1)";
+                    e.currentTarget.style.color = "#FFFFFF";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "rgba(255, 255, 255, 0.8)";
                   }
                 }}
               >
@@ -145,38 +151,39 @@ export function Navbar() {
         {!isMobile && showLeagueSelector && (
           <div
             style={{
-              position: 'relative',
+              position: "relative",
             }}
           >
             <button
               onClick={() => setLeagueDropdownOpen(!leagueDropdownOpen)}
               style={{
-                display: 'flex',
-                alignItems: 'center',
+                display: "flex",
+                alignItems: "center",
                 gap: 8,
                 paddingLeft: 12,
                 paddingRight: 12,
                 paddingTop: 6,
                 paddingBottom: 6,
                 borderRadius: 6,
-                fontSize: '0.875rem',
+                fontSize: "0.875rem",
                 fontWeight: 500,
-                border: '1px solid rgba(212, 175, 55, 0.5)',
-                background: 'transparent',
-                color: '#FFFFFF',
-                cursor: 'pointer',
-                transition: 'all 200ms',
+                border: "1px solid rgba(212, 175, 55, 0.5)",
+                background: "transparent",
+                color: "#FFFFFF",
+                cursor: "pointer",
+                transition: "all 200ms",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(212, 175, 55, 0.2)';
-                e.currentTarget.style.borderColor = '#D4AF37';
+                e.currentTarget.style.backgroundColor =
+                  "rgba(212, 175, 55, 0.2)";
+                e.currentTarget.style.borderColor = "#D4AF37";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.5)';
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.borderColor = "rgba(212, 175, 55, 0.5)";
               }}
             >
-              {selectedLeague?.name || 'Liga'}
+              {selectedLeague?.name || "Liga"}
               <ChevronDown size={16} />
             </button>
 
@@ -186,16 +193,16 @@ export function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 style={{
-                  position: 'absolute',
-                  top: '100%',
+                  position: "absolute",
+                  top: "100%",
                   right: 0,
                   marginTop: 4,
-                  background: '#FFFFFF',
+                  background: "#FFFFFF",
                   borderRadius: 8,
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                  boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
                   zIndex: 100,
                   minWidth: 200,
-                  overflow: 'hidden',
+                  overflow: "hidden",
                 }}
               >
                 {leagues.map((league) => (
@@ -206,26 +213,30 @@ export function Navbar() {
                       setLeagueDropdownOpen(false);
                     }}
                     style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '10px 16px',
-                      border: 'none',
-                      background: selectedLeagueId === league.id ? '#D4AF37' : 'transparent',
-                      color: selectedLeagueId === league.id ? '#1B3C73' : '#111827',
-                      cursor: 'pointer',
-                      transition: 'all 200ms',
-                      fontSize: '0.875rem',
+                      display: "block",
+                      width: "100%",
+                      textAlign: "left",
+                      padding: "10px 16px",
+                      border: "none",
+                      background:
+                        selectedLeagueId === league.id
+                          ? "#D4AF37"
+                          : "transparent",
+                      color:
+                        selectedLeagueId === league.id ? "#1B3C73" : "#111827",
+                      cursor: "pointer",
+                      transition: "all 200ms",
+                      fontSize: "0.875rem",
                       fontWeight: 500,
                     }}
                     onMouseEnter={(e) => {
                       if (selectedLeagueId !== league.id) {
-                        e.currentTarget.style.backgroundColor = '#F5F5F5';
+                        e.currentTarget.style.backgroundColor = "#F5F5F5";
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (selectedLeagueId !== league.id) {
-                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.backgroundColor = "transparent";
                       }
                     }}
                   >
@@ -241,13 +252,13 @@ export function Navbar() {
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           style={{
-            display: isMobile ? 'block' : 'none',
-            background: 'transparent',
-            border: 'none',
-            color: '#FFFFFF',
+            display: isMobile ? "block" : "none",
+            background: "transparent",
+            border: "none",
+            color: "#FFFFFF",
             padding: 8,
             borderRadius: 6,
-            cursor: 'pointer',
+            cursor: "pointer",
           }}
           aria-label="Toggle menu"
         >
@@ -265,33 +276,33 @@ export function Navbar() {
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
               style={{
-                position: 'fixed',
+                position: "fixed",
                 inset: 0,
-                top: 64,
-                background: 'rgba(0, 0, 0, 0.4)',
+                top: 80,
+                background: "rgba(0, 0, 0, 0.4)",
                 zIndex: 40,
               }}
             />
             <motion.div
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 250 }}
               style={{
-                position: 'fixed',
-                top: 64,
+                position: "fixed",
+                top: 80,
                 right: 0,
                 bottom: 0,
                 width: 288,
-                background: '#1B3C73',
+                background: "#1B3C73",
                 zIndex: 50,
-                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
               }}
             >
               <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
+                  display: "flex",
+                  flexDirection: "column",
                   padding: 16,
                   gap: 4,
                 }}
@@ -301,26 +312,26 @@ export function Navbar() {
                     style={{
                       marginBottom: 12,
                       paddingBottom: 12,
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
                     }}
                   >
                     <label
                       style={{
-                        display: 'block',
-                        fontSize: '0.75rem',
+                        display: "block",
+                        fontSize: "0.75rem",
                         fontWeight: 600,
-                        color: 'rgba(255, 255, 255, 0.6)',
+                        color: "rgba(255, 255, 255, 0.6)",
                         marginBottom: 8,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
                       }}
                     >
                       Seleccionar Liga
                     </label>
                     <div
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column',
+                        display: "flex",
+                        flexDirection: "column",
                         gap: 2,
                       }}
                     >
@@ -332,25 +343,33 @@ export function Navbar() {
                             setMobileOpen(false);
                           }}
                           style={{
-                            textAlign: 'left',
-                            padding: '10px 12px',
-                            border: 'none',
-                            background: selectedLeagueId === league.id ? '#D4AF37' : 'transparent',
-                            color: selectedLeagueId === league.id ? '#1B3C73' : 'rgba(255, 255, 255, 0.8)',
-                            cursor: 'pointer',
-                            transition: 'all 200ms',
-                            fontSize: '0.875rem',
+                            textAlign: "left",
+                            padding: "10px 12px",
+                            border: "none",
+                            background:
+                              selectedLeagueId === league.id
+                                ? "#D4AF37"
+                                : "transparent",
+                            color:
+                              selectedLeagueId === league.id
+                                ? "#1B3C73"
+                                : "rgba(255, 255, 255, 0.8)",
+                            cursor: "pointer",
+                            transition: "all 200ms",
+                            fontSize: "0.875rem",
                             fontWeight: 500,
                             borderRadius: 6,
                           }}
                           onMouseEnter={(e) => {
                             if (selectedLeagueId !== league.id) {
-                              e.currentTarget.style.backgroundColor = 'rgba(27, 60, 115, 0.5)';
+                              e.currentTarget.style.backgroundColor =
+                                "rgba(27, 60, 115, 0.5)";
                             }
                           }}
                           onMouseLeave={(e) => {
                             if (selectedLeagueId !== league.id) {
-                              e.currentTarget.style.backgroundColor = 'transparent';
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
                             }
                           }}
                         >
@@ -370,30 +389,33 @@ export function Navbar() {
                       to={link.to}
                       onClick={() => setMobileOpen(false)}
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: "flex",
+                        alignItems: "center",
                         gap: 12,
                         paddingLeft: 16,
                         paddingRight: 16,
                         paddingTop: 12,
                         paddingBottom: 12,
                         borderRadius: 8,
-                        fontSize: '1rem',
+                        fontSize: "1rem",
                         fontWeight: 500,
-                        transition: 'all 200ms',
-                        textDecoration: 'none',
-                        background: isActive ? '#D4AF37' : 'transparent',
-                        color: isActive ? '#1B3C73' : 'rgba(255, 255, 255, 0.8)',
-                        cursor: 'pointer',
+                        transition: "all 200ms",
+                        textDecoration: "none",
+                        background: isActive ? "#D4AF37" : "transparent",
+                        color: isActive
+                          ? "#1B3C73"
+                          : "rgba(255, 255, 255, 0.8)",
+                        cursor: "pointer",
                       }}
                       onMouseEnter={(e) => {
                         if (!isActive) {
-                          e.currentTarget.style.backgroundColor = 'rgba(27, 60, 115, 0.1)';
+                          e.currentTarget.style.backgroundColor =
+                            "rgba(27, 60, 115, 0.1)";
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (!isActive) {
-                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.backgroundColor = "transparent";
                         }
                       }}
                     >

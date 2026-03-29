@@ -36,6 +36,9 @@ export const HomePage = () => {
           position: 'relative',
           background: 'linear-gradient(135deg, #0F2647 0%, #1B3C73 50%, #0F2647 100%)',
           overflow: 'hidden',
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          marginTop: -16,
         }}
       >
         {/* Animated background elements */}
@@ -125,13 +128,14 @@ export const HomePage = () => {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 100,
-              height: 100,
+              width: 120,
+              height: 120,
               borderRadius: 24,
-              background: 'linear-gradient(135deg, #D4AF37 0%, #E5D158 100%)',
+              background: '#FFFFFF',
               marginBottom: 32,
               boxShadow: '0 20px 40px -10px rgba(212, 175, 55, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.1)',
               position: 'relative',
+              padding: 12,
             }}
           >
             <motion.div
@@ -145,7 +149,17 @@ export const HomePage = () => {
                 opacity: 0.5,
               }}
             />
-            <Trophy size={50} color="#1B3C73" />
+            <img
+              src="/lmff_logo.png"
+              alt="Liga Metropolitana FF"
+              style={{
+                height: '100%',
+                width: '100%',
+                objectFit: 'contain',
+                position: 'relative',
+                zIndex: 10,
+              }}
+            />
           </motion.div>
 
           {/* Main heading */}
