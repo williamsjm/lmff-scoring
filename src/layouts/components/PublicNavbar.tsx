@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Grid, Button, Drawer } from 'antd';
-import { MenuOutlined, TrophyOutlined, OrderedListOutlined, HomeOutlined } from '@ant-design/icons';
+import { MenuOutlined, TrophyOutlined, OrderedListOutlined, HomeOutlined, BarChartOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../shared/constants/routes';
 
@@ -11,6 +11,7 @@ const menuItems = [
   { key: ROUTES.HOME, icon: <HomeOutlined />, label: 'Inicio' },
   { key: ROUTES.STANDINGS, icon: <OrderedListOutlined />, label: 'Posiciones' },
   { key: ROUTES.RESULTS, icon: <TrophyOutlined />, label: 'Resultados' },
+  { key: ROUTES.STATS, icon: <BarChartOutlined />, label: 'Estadísticas' },
 ];
 
 export const PublicNavbar: React.FC = () => {

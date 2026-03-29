@@ -13,6 +13,7 @@ const matchdays_router_1 = require("./routes/matchdays.router");
 const matches_router_1 = require("./routes/matches.router");
 const standings_router_1 = require("./routes/standings.router");
 const users_router_1 = require("./routes/users.router");
+const playerStats_router_1 = require("./routes/playerStats.router");
 function createApp() {
     const app = (0, express_1.default)();
     app.use((0, cors_1.default)({ origin: true }));
@@ -27,6 +28,8 @@ function createApp() {
     app.use('/api/leagues/:leagueId/tournaments/:tId/matches', matches_router_1.matchesRouter);
     app.use('/api/leagues/:leagueId/tournaments/:tId/standings', standings_router_1.standingsRouter);
     app.use('/api/users', users_router_1.usersRouter);
+    app.use('/api/leagues/:leagueId/tournaments/:tId/matches/:matchId/player-stats', playerStats_router_1.playerStatsRouter);
+    app.use('/api/leagues/:leagueId/tournaments/:tId/player-stats/aggregate', playerStats_router_1.playerStatsAggregateRouter);
     return app;
 }
 //# sourceMappingURL=app.js.map

@@ -24,6 +24,13 @@ export const queryKeys = {
     byMatchday: (leagueId: string, tournamentId: string, matchdayId: string) =>
       ["matches", leagueId, tournamentId, matchdayId] as const,
   },
+  playerStats: {
+    root: ['playerStats'] as const,
+    byMatch: (leagueId: string, tournamentId: string, matchId: string) =>
+      ['playerStats', leagueId, tournamentId, matchId] as const,
+    aggregate: (leagueId: string, tournamentId: string) =>
+      ['playerStats', leagueId, tournamentId, 'aggregate'] as const,
+  },
   standings: {
     root: ["standings"] as const,
     all: (leagueId: string, tournamentId: string) =>

@@ -9,6 +9,7 @@ import { LoadingSpinner } from '../shared/components/LoadingSpinner';
 const HomePage = lazy(() => import('../pages/public/HomePage'));
 const StandingsPage = lazy(() => import('../pages/public/StandingsPage'));
 const ResultsPage = lazy(() => import('../pages/public/ResultsPage'));
+const StatsPage = lazy(() => import('../pages/public/StatsPage'));
 
 // Admin pages (lazy loaded)
 const LoginPage = lazy(() => import('../pages/admin/LoginPage'));
@@ -31,6 +32,8 @@ export const AppRouter: React.FC = () => {
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/results/:tournamentId" element={<ResultsPage />} />
           <Route path="/results/:tournamentId/:matchdayId" element={<ResultsPage />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/stats/:tournamentId" element={<StatsPage />} />
         </Route>
 
         {/* Admin login (no layout) */}

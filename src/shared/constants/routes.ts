@@ -13,4 +13,6 @@ export const ROUTES = {
   ADMIN_MATCH_RESULTS: '/admin/tournaments/:id/matchdays/:mdId/results',
   ADMIN_TEAMS: '/admin/teams',
   ADMIN_PLAYERS: '/admin/players',
+  STATS: '/stats',
+  STATS_TOURNAMENT: '/stats/:tournamentId',
 } as const;

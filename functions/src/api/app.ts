@@ -7,6 +7,7 @@ import { matchdaysRouter } from './routes/matchdays.router';
 import { matchesRouter } from './routes/matches.router';
 import { standingsRouter } from './routes/standings.router';
 import { usersRouter } from './routes/users.router';
+import { playerStatsRouter, playerStatsAggregateRouter } from './routes/playerStats.router';
 
 export function createApp(): express.Application {
   const app = express();
@@ -25,6 +26,8 @@ export function createApp(): express.Application {
   app.use('/api/leagues/:leagueId/tournaments/:tId/matches', matchesRouter);
   app.use('/api/leagues/:leagueId/tournaments/:tId/standings', standingsRouter);
   app.use('/api/users', usersRouter);
+  app.use('/api/leagues/:leagueId/tournaments/:tId/matches/:matchId/player-stats', playerStatsRouter);
+  app.use('/api/leagues/:leagueId/tournaments/:tId/player-stats/aggregate', playerStatsAggregateRouter);
 
   return app;
 }
