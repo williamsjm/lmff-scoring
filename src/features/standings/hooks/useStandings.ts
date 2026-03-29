@@ -32,7 +32,7 @@ export const useStandings = (
         matchdayNumber ?? 0,
       ),
       queryFn:
-        leagueId && tournamentId && !realtime && matchdayNumber !== null
+        leagueId && tournamentId && matchdayNumber !== null
           ? () =>
               standingsService.getByMatchday(
                 leagueId,
@@ -71,18 +71,22 @@ export const useStandings = (
     setMatchdayNumber(n);
   };
 
+  const resetMatchday = () => setMatchdayNumber(null);
+
   // Determinar qué datos y loading state mostrar
-  const standings = realtime
-    ? realtimeStandings
-    : matchdayNumber !== null
+  const standings =
+    matchdayNumber !== null
       ? matchdayStandingsData
-      : standingsData;
+      : realtime
+        ? realtimeStandings
+        : standingsData;
 
-  const loading = realtime
-    ? realtimeLoading
-    : matchdayNumber !== null
+  const loading =
+    matchdayNumber !== null
       ? matchdayLoading
-      : queryLoading;
+      : realtime
+        ? realtimeLoading
+        : queryLoading;
 
-  return { standings, loading, fetchByMatchday };
+  return { standings, loading, fetchByMatchday, resetMatchday };
 };

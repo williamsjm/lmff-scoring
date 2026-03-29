@@ -14,15 +14,14 @@ const StandingsPage: React.FC = () => {
   const { tournamentId: paramTournamentId } = useParams<{ tournamentId: string }>();
   const { activeTournament, allTournaments, selectTournament } = useActiveTournament();
   const currentTournamentId = paramTournamentId || activeTournament?.id;
-  const { standings, loading, fetchByMatchday } = useStandings(currentTournamentId, true);
+  const { standings, loading, fetchByMatchday, resetMatchday } = useStandings(currentTournamentId, true);
   const { matchdays } = useMatchdays(currentTournamentId);
   const screens = useBreakpoint();
 
   const handleTournamentChange = (id: string) => selectTournament(id);
   const handleMatchdayFilter = (value: number | undefined) => {
     if (value === undefined) {
-      // Reset handled by useStandings realtime subscription
-      window.location.reload();
+      resetMatchday();
     } else {
       fetchByMatchday(value);
     }

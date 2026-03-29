@@ -1,0 +1,85 @@
+[
+  {
+    "name": "Elite FFC",
+    "players": [
+      { "name": "Luis Melo", "ci": "18529788", "number": 81 },
+      { "name": "Sebastián Toledo", "ci": "25764339", "number": 21 },
+      { "name": "Williams Mejias", "ci": "19461728", "number": 86 },
+      { "name": "Juan Ordosgoitti", "ci": "31549174", "number": 58 },
+      { "name": "Anthony García", "ci": "21070122", "number": 1 },
+      { "name": "Shirdley Escalona", "ci": "19634708", "number": 4 },
+      { "name": "Yeldrish Leota", "ci": "32180541", "number": 19 },
+      { "name": "Wilmary Ortiz", "ci": "32481412", "number": 20 },
+      { "name": "Arantza Pinzón", "ci": "33537965", "number": 24 },
+      { "name": "Anabella Valiente", "ci": "33641221", "number": 15 },
+      { "name": "Carlos Vegas", "ci": "16032672", "number": 84 },
+      { "name": "Pablo Pérez", "ci": "32011260", "number": 0 }
+    ]
+  },
+  {
+    "name": "ThunderFlag",
+    "players": [
+      { "name": "Crisbely Martinez", "ci": "25990845", "number": 80 },
+      { "name": "Victoria Rojas", "ci": "33780518", "number": 6 },
+      { "name": "Daniella Machado", "ci": "34790521", "number": 15 },
+      { "name": "Camilo Berroteran", "ci": "30941916", "number": 13 },
+      { "name": "Ziobert Moreno", "ci": "25987758", "number": 31 },
+      { "name": "Greyvher Bueno", "ci": "29966276", "number": 66 },
+      { "name": "Jhorni Labarca", "ci": "27714190", "number": 11 },
+      { "name": "Adolfo Pérez", "ci": "21344208", "number": 8 },
+      { "name": "Juan Olivares", "ci": "33228809", "number": 22 },
+      { "name": "Yoelberth Araujo", "ci": "30140064", "number": 45 },
+      { "name": "Nathalia Capriles", "ci": "33186719", "number": 20 },
+      { "name": "Andrea Levanti", "ci": "33187061", "number": 23 }
+    ]
+  },
+  {
+    "name": "Mean Machine",
+    "players": [
+      { "name": "Stephanie Garcia", "ci": "25510976", "number": 2 },
+      { "name": "Gandhi Pineda", "ci": "24316357", "number": 3 },
+      { "name": "Aleiram Calderón", "ci": "28312732", "number": 33 },
+      { "name": "Sthefany Paez", "ci": "20290321", "number": 53 },
+      { "name": "Dionayffred Bueno", "ci": "27756751", "number": 12 },
+      { "name": "Gabriel Álvarez", "ci": "24884621", "number": 20 },
+      { "name": "Junior Canhoto", "ci": "20638940", "number": 36 },
+      { "name": "Alvaro Piñero", "ci": "26483872", "number": 93 },
+      { "name": "Cecil Prieto", "ci": "18245661", "number": 22 },
+      { "name": "Barbara Lanz", "ci": "26868077", "number": 9 },
+      { "name": "Angel Rueda", "ci": "27420894", "number": 11 },
+      { "name": "Ismar Sánchez", "ci": "18223479", "number": 14 }
+    ]
+  },
+  {
+    "name": "Atlantis",
+    "players": [
+      { "name": "Manuel Espinoza", "ci": "26919301", "number": 17 },
+      { "name": "Rodolfo Zerpa", "ci": "30520488", "number": 21 },
+      { "name": "Haron Hernández", "ci": "28443973", "number": 5 },
+      { "name": "Cristian Alcántara", "ci": "29706495", "number": 11 },
+      { "name": "Erick Saumelli", "ci": "26747667", "number": 68 },
+      { "name": "Nevin Zambrano", "ci": "28175582", "number": 25 },
+      { "name": "Yorley Román", "ci": "30468115", "number": 1 },
+      { "name": "Josmary Aguilera", "ci": "27234269", "number": 9 },
+      { "name": "Milena Reyes", "ci": "29766696", "number": 22 },
+      { "name": "Zuleima Rodríguez", "ci": "13405850", "number": 13 },
+      { "name": "Victoria Reyes", "ci": "32104833", "number": 24 },
+      { "name": "Diana Rebolledo", "ci": "28315443", "number": 15 }
+    ]
+  },
+  {
+    "name": "Legendarios",
+    "players": [
+      { "name": "Stephanie", "ci": null, "number": 42 },
+      { "name": "Karielis", "ci": null, "number": 30 },
+      { "name": "Yanelis", "ci": null, "number": 25 },
+      { "name": "Lenin", "ci": null, "number": 47 },
+      { "name": "Sebastian", "ci": null, "number": 24 },
+      { "name": "Juan", "ci": null, "number": 10 },
+      { "name": "Roger", "ci": null, "number": 6 },
+      { "name": "Edgar", "ci": null, "number": 17 },
+      { "name": "Mario de Jesus", "ci": null, "number": 3 },
+      { "name": "Miguel Mendez", "ci": null, "number": 13 }
+    ]
+  }
+]

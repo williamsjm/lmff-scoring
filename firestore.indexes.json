@@ -9,6 +9,14 @@
       ]
     },
     {
+      "collectionGroup": "matches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "matchdayNumber", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "standings",
       "queryScope": "COLLECTION",
       "fields": [

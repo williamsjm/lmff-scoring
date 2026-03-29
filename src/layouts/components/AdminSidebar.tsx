@@ -30,9 +30,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollaps
   const location = useLocation();
 
   const selectedKey =
-    menuItems.find(
-      item => !item.disabled && (location.pathname === item.key || location.pathname.startsWith(item.key + '/'))
-    )?.key || ROUTES.ADMIN_DASHBOARD;
+    [...menuItems]
+      .sort((a, b) => b.key.length - a.key.length)
+      .find(item => !item.disabled && (location.pathname === item.key || location.pathname.startsWith(item.key + '/')))
+      ?.key || ROUTES.ADMIN_DASHBOARD;
 
   return (
     <Sider
@@ -63,38 +64,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ collapsed, onCollaps
           padding: '0 12px',
         }}
       >
-        <div
+        <img
+          src="/lmff_logo.png"
+          alt="Liga Metropolitana"
           style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: '#1B3C73',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: 12,
-            fontWeight: 700,
-            flexShrink: 0,
+            height: collapsed ? 32 : 48,
+            width: 'auto',
+            objectFit: 'contain',
+            transition: 'height 0.2s',
           }}
-        >
-          LM
-        </div>
-        {!collapsed && (
-          <span
-            style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: '#1e293b',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: 160,
-            }}
-          >
-            Liga Metropolitana
-          </span>
-        )}
+        />
       </div>
 
       {/* Nav items */}

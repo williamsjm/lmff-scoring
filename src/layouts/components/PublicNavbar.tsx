@@ -36,9 +36,7 @@ export const PublicNavbar: React.FC = () => {
           top: 0,
           zIndex: 10,
         }}>
-          <span style={{ color: '#fff', fontSize: 18, fontWeight: 700 }}>
-            Liga Metropolitana FF
-          </span>
+          <img src="/lmff_logo.png" alt="Liga Metropolitana FF" style={{ height: 36, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
           <Button
             type="text"
             icon={<MenuOutlined style={{ color: '#fff', fontSize: 20 }} />}
@@ -76,9 +74,7 @@ export const PublicNavbar: React.FC = () => {
       top: 0,
       zIndex: 10,
     }}>
-      <span style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginRight: 40 }}>
-        Liga Metropolitana FF
-      </span>
+      <img src="/lmff_logo.png" alt="Liga Metropolitana FF" style={{ height: 40, width: 'auto', objectFit: 'contain', marginRight: 40, filter: 'brightness(0) invert(1)' }} />
       <Menu
         theme="dark"
         mode="horizontal"
