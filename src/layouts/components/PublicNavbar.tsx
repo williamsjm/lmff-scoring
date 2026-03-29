@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Grid, Button, Drawer } from 'antd';
+import { Layout, Menu, Grid, Button, Drawer, Select } from 'antd';
 import { MenuOutlined, TrophyOutlined, OrderedListOutlined, HomeOutlined, BarChartOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../shared/constants/routes';
+import { usePublicLeague } from '../../features/leagues/context/PublicLeagueContext';
 
 const { Header } = Layout;
 const { useBreakpoint } = Grid;
@@ -19,6 +20,8 @@ export const PublicNavbar: React.FC = () => {
   const location = useLocation();
   const screens = useBreakpoint();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { leagues, selectedLeagueId, setSelectedLeagueId } = usePublicLeague();
+  const showLeagueSelector = leagues.length > 1;
 
   const selectedKey = menuItems.find(item =>
     location.pathname === item.key || location.pathname.startsWith(item.key + '/')
@@ -51,6 +54,15 @@ export const PublicNavbar: React.FC = () => {
           open={drawerOpen}
           width={260}
         >
+          {showLeagueSelector && (
+            <Select
+              value={selectedLeagueId ?? undefined}
+              onChange={setSelectedLeagueId}
+              options={leagues.map((l) => ({ value: l.id, label: l.name }))}
+              style={{ width: '100%', marginBottom: 12 }}
+              placeholder="Seleccionar liga"
+            />
+          )}
           <Menu
             mode="vertical"
             selectedKeys={[selectedKey]}
@@ -84,6 +96,15 @@ export const PublicNavbar: React.FC = () => {
         onClick={({ key }) => navigate(key)}
         style={{ background: 'transparent', flex: 1, borderBottom: 'none' }}
       />
+      {showLeagueSelector && (
+        <Select
+          value={selectedLeagueId ?? undefined}
+          onChange={setSelectedLeagueId}
+          options={leagues.map((l) => ({ value: l.id, label: l.name }))}
+          style={{ width: 220, marginLeft: 16 }}
+          variant="filled"
+        />
+      )}
     </Header>
   );
 };

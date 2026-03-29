@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { leaguesRouter } from './routes/leagues.router';
 import { teamsRouter } from './routes/teams.router';
 import { playersRouter } from './routes/players.router';
 import { tournamentsRouter } from './routes/tournaments.router';
@@ -18,6 +19,8 @@ export function createApp(): express.Application {
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
   });
+
+  app.use('/api/leagues', leaguesRouter);
 
   app.use('/api/leagues/:leagueId/teams', teamsRouter);
   app.use('/api/leagues/:leagueId/players', playersRouter);

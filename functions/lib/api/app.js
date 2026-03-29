@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createApp = createApp;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const leagues_router_1 = require("./routes/leagues.router");
 const teams_router_1 = require("./routes/teams.router");
 const players_router_1 = require("./routes/players.router");
 const tournaments_router_1 = require("./routes/tournaments.router");
@@ -21,6 +22,7 @@ function createApp() {
     app.get('/api/health', (_req, res) => {
         res.json({ status: 'ok' });
     });
+    app.use('/api/leagues', leagues_router_1.leaguesRouter);
     app.use('/api/leagues/:leagueId/teams', teams_router_1.teamsRouter);
     app.use('/api/leagues/:leagueId/players', players_router_1.playersRouter);
     app.use('/api/leagues/:leagueId/tournaments', tournaments_router_1.tournamentsRouter);
