@@ -19,6 +19,8 @@
     "antd": "^5.29.3",
     "dayjs": "^1.11.19",
     "firebase": "^10.14.1",
+    "framer-motion": "^11.0.8",
+    "lucide-react": "^0.408.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^6.30.3"
