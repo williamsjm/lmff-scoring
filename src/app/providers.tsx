@@ -3,6 +3,7 @@ import { ConfigProvider, App } from "antd";
 import esES from "antd/locale/es_ES";
 import { theme } from "../styles/theme";
 import { AuthProvider } from "../features/auth/context/AuthContext";
+import { PublicLeagueProvider } from "../features/leagues/context/PublicLeagueContext";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -27,7 +28,9 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({
       <ConfigProvider theme={theme} locale={esES}>
         <App>
           <BrowserRouter>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+                <PublicLeagueProvider>{children}</PublicLeagueProvider>
+              </AuthProvider>
           </BrowserRouter>
         </App>
       </ConfigProvider>
